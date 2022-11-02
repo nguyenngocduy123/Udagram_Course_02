@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
@@ -30,6 +30,22 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
+
+  app.get( "/filteredimage/", ( req: Request, res: Response ) => {
+    // destruct our path params
+    let { image_url } = req.query;
+
+    if (!image_url) { 
+      return res.status(400).send(`image_url is required`);
+    }
+
+    const pathImage =  filterImageFromURL(image_url);
+    pathImage.then(val => {
+      deleteLocalFiles([val]);
+      res.status(200).send(val);      
+    })
+    
+  } );
   
   // Root Endpoint
   // Displays a simple message to the user
