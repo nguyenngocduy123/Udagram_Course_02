@@ -33,13 +33,13 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   app.get( "/filteredimage/", async ( req: Request, res: Response ) => {
     // destruct our path params
-    let { image_url } = req.query;
+    let { image_url } :{image_url:string} = req.query
 
     if (!image_url) { 
       return res.status(400).send(`image_url is required`);
     }
 
-    const pathImage =  await filterImageFromURL(image_url);
+    const pathImage: string =  await filterImageFromURL(image_url);
     res.status(200);
     res.sendFile(pathImage);
     res.on('finish', function() { // this url help me capture exatly finish event => https://stackoverflow.com/questions/11137648/how-do-i-capture-a-response-end-event-in-node-jsexpress
