@@ -31,7 +31,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   //! END @TODO1
 
-  app.get( "/filteredimage/", ( req: Request, res: Response ) => {
+  app.get( "/filteredimage/", async ( req: Request, res: Response ) => {
     // destruct our path params
     let { image_url } = req.query;
 
@@ -39,12 +39,12 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       return res.status(400).send(`image_url is required`);
     }
 
-    const pathImage =  filterImageFromURL(image_url);
-    pathImage.then(val => {
-      deleteLocalFiles([val]);
-      res.status(200).send(val);      
-    })
-    
+    const pathImage =  await filterImageFromURL(image_url);
+    res.status(200);
+    res.sendFile(pathImage);
+    res.on('finish', function() {
+      deleteLocalFiles([pathImage]);
+    });
   } );
   
   // Root Endpoint
