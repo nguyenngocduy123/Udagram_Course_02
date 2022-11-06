@@ -42,8 +42,8 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     const pathImage =  await filterImageFromURL(image_url);
     res.status(200);
     res.sendFile(pathImage);
-    res.on('finish', function() {
-      deleteLocalFiles([pathImage]);
+    res.on('finish', function() { // this url help me capture exatly finish event => https://stackoverflow.com/questions/11137648/how-do-i-capture-a-response-end-event-in-node-jsexpress
+      deleteLocalFiles([pathImage]); // 
     });
   } );
   
